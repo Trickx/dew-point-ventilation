@@ -1,0 +1,56 @@
+;SetOption64
+
+>D
+humo=0
+tempo=0
+dewo=0
+humi=0
+tempi=0
+dewi=0
+alog=0
+
+; moving average for 60 seconds
+M:mhumo=0 60
+M:mtempo=0 60
+M:mhumi=0 60
+M:mtempi=0 60
+
+>B
+; clear display
+dprec0
+;displayreinit
+dt [z]
+
+>T
+; get sensor values
+alog=ANALOG#A0
+;print Analog:%alog%
+
+tempo=AM2301_00#Temperature
+tempi=AM2301_14#Temperature
+;print Temperatur (Out):%tempo%
+;print Temperatur (In):%tempi%
+
+humo=AM2301_00#Humidity
+humi=AM2301_14#Humidity
+;print Humidity (Out):%humo%
+;print Humidity (In):%humi%
+
+dewo=AM2301_00#DewPoint
+dewi=AM2301_14#DewPoint
+;print Dew Point (Out): %1dewo%°C
+;print Dew Point (In): %1dewi%°C
+
+>S
+; average sensor values every second
+mhumo=humo
+mtempo=tempo
+mhumi=humi
+mtempi=tempi
+
+dt [l1c1]%tstamp%
+dt [l2c1]Out: T:%1tempo%~dfC H:%0humo%~25
+dt [l3c1]In : T:%1tempi%~dfC H:%0humi%~25
+dt [l4c1]Dew: I:%1dewi%~dfC O:%1dewo%~df
+
+>R
